@@ -199,7 +199,7 @@ test('links straight into a story, and old links to the Team view still land', a
   await page.close();
 });
 
-test('footage: plays locally, never when published, and the held-back file cannot be fetched', async (t) => {
+test('footage: only cleared clips play when published, from the site itself, and the archive cannot be fetched', async (t) => {
   if (skip(t)) return;
   let { page } = await open(WALK + '?story=wheels#wheels');
   await page.waitForFunction(() => { const v = document.querySelector('#drawer video'); return v && v.readyState >= 1; }, { timeout: 15000 });
@@ -211,7 +211,10 @@ test('footage: plays locally, never when published, and the held-back file canno
   await page.close();
 
   ({ page } = await open(PWALK + '?story=wheels#wheels'));
-  assert.equal(await page.$$eval('video', (v) => v.length), 0, 'the published site has a playable clip');
+  // only cleared clips play when published: each from the site's own /media/, none from the archive
+  const pub = await page.$$eval('#drawer video', (v) => v.map((x) => x.getAttribute('src') || x.dataset.src || ''));
+  assert.ok(pub.length > 0, 'the cleared clips are not on the published site');
+  assert.ok(pub.every((u) => u.startsWith('/media/')), 'the published site plays a clip that is not cleared: ' + pub.join(', '));
   assert.equal(await page.$$eval('.slot', (s) => s.length), 0, 'a striped box for a clip that is not cleared is on the published site');
   assert.equal(await page.evaluate(() => fetch('/local-media/Navigation%20Collections/all_robot_navigation.mp4').then((r) => r.ok && (r.headers.get('content-type') || '').startsWith('video'))), false, 'the published site serves a private clip');
   assert.equal(await page.$('#preview-note'), null, 'the preview note is on the published site');
@@ -1028,7 +1031,7 @@ test('the desk: the clock can be dragged to another time, and a click puts it ba
 test('the desk: published, on a phone, and without 3D', async (t) => {
   if (skip(t)) return;
   let { page, errors } = await openDesk(PROD + '?open=monitor&work=wheels');
-  assert.equal(await page.$$eval('video', (v) => v.length), 0, 'the published desk has a playable clip');
+  assert.ok((await page.$$eval('video', (v) => v.map((x) => x.getAttribute('src') || x.dataset.src || ''))).every((u) => u.startsWith('/media/')), 'the published desk plays a clip that is not cleared');
   assert.equal(await page.$('#preview-note'), null);
   assert.equal(await page.$('#time-test'), null, 'the time-of-day tester is on the published site');
   assert.equal(await page.$('#walls-test'), null, 'the wall colour switch is on the published site');

@@ -18,6 +18,7 @@ const POST_1000KM = { text: 'as the company announced', href: 'https://www.linke
 // here and shows in the preview as a striped box, ready for the day it is cleared.
 // Clip status:
 //   team    = filmed in-house at Invento (Mitra). Faces need each person's OK, or a blur.
+//             Cleared (22 Nov 2026): a small copy in public/media/, no sound, no metadata; `local` is the archive original.
 //   company = Neural Foundry material. Needs the company's agreement.
 //   held    = never shown.
 //   drawn   = no footage exists; the scene is drawn.
@@ -125,9 +126,9 @@ export const scenes = [
         ],
         links: [POST_1000KM],
         clips: [
-          { title: 'Five or six robots moving at once', status: 'team', local: NC + 'all_robot_navigation.mp4' },
-          { title: 'Through a narrow passage', status: 'team', local: NC + 'Narrow_Passage_1.mp4' },
-          { title: 'A person steps into its path', status: 'team', local: NC + 'Obstacle_Avoidance.blurred.mp4' },
+          { title: 'Five or six robots moving at once', status: 'team', local: NC + 'all_robot_navigation.mp4', cleared: true, src: '/media/robots-moving.mp4' },
+          { title: 'Through a narrow passage', status: 'team', local: NC + 'Narrow_Passage_1.mp4', cleared: true, src: '/media/narrow-passage.mp4' },
+          { title: 'A person steps into its path', status: 'team', local: NC + 'Obstacle_Avoidance.blurred.mp4', cleared: true, src: '/media/person-steps-in.mp4' },
         ],
       },
       {
@@ -137,7 +138,7 @@ export const scenes = [
           'We looked at three ways to find the dock: a known spot on the map, its shape in the lidar scan, and printed markers the camera can see. We settled on the markers.',
           'The hard part was the last few centimetres: lining up and backing on until the contacts touch. Then I taught teammates and customers how to set it up.',
         ],
-        clips: [{ title: 'Docking, seen from the side', status: 'team', local: NC + 'Docking_1.mp4' }],
+        clips: [{ title: 'Docking, seen from the side', status: 'team', local: NC + 'Docking_1.mp4', cleared: true, src: '/media/docking-side.mp4' }],
       },
       {
         title: 'Mapping a building without being there',
@@ -222,9 +223,9 @@ export const scenes = [
           'The daily flow ran on the robot’s screen: some news, some music, a little exercise, one after the other.',
         ],
         clips: [
-          { title: 'Crossing the office to a seated person', status: 'team', local: NC + 'pose_follower_merge.mp4' },
-          { title: 'Following a person until they sit', status: 'team', local: NC + 'people follower.mp4' },
-          { title: 'The daily flow on the robot’s screen', status: 'team', local: NC + 'Media_Flow.blurred.mp4' },
+          { title: 'Crossing the office to a seated person', status: 'team', local: NC + 'pose_follower_merge.mp4', cleared: true, src: '/media/crossing-to-seated.mp4' },
+          { title: 'Following a person until they sit', status: 'team', local: NC + 'people follower.mp4', cleared: true, src: '/media/following-person.mp4' },
+          { title: 'The daily flow on the robot’s screen', status: 'team', local: NC + 'Media_Flow.blurred.mp4', cleared: true, src: '/media/daily-flow.mp4' },
         ],
       },
     ],
@@ -251,8 +252,8 @@ export const scenes = [
         ],
         links: [POST_ARM],
         clips: [
-          { title: 'The arm moving', status: 'team', local: NC + 'Mitra Arm Control.mp4' },
-          { title: 'A hand flexing', status: 'team', local: NC + 'humonoid hands control.mp4' },
+          { title: 'The arm moving', status: 'team', local: NC + 'Mitra Arm Control.mp4', cleared: true, src: '/media/arm-moving.mp4' },
+          { title: 'A hand flexing', status: 'team', local: NC + 'humonoid hands control.mp4', cleared: true, src: '/media/hand-flexing.mp4' },
         ],
       },
     ],
