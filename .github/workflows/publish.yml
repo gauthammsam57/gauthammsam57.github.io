@@ -1,9 +1,13 @@
 # Builds the site and publishes it to GitHub Pages (Settings → Pages → Source: GitHub Actions).
+# A version tag (v1.2.0) builds the same way and makes a GitHub Release instead, with that version's
+# CV PDF attached and the tag's message as its notes:
+#   git tag -a v1.2.0 -m "notes"  &&  git push origin v1.2.0
 name: Publish
 
 on:
   push:
     branches: [main]
+    tags: ['v*']
   schedule:
     - cron: '0 3 * * 1' # Mondays, 03:00 UTC: brings the commit chart up to date
   workflow_dispatch:
@@ -65,6 +69,8 @@ jobs:
           path: dist
 
   deploy:
+    # the site is published from main only (Pages does not take tags); a tag makes a release below
+    if: startsWith(github.ref, 'refs/heads/')
     needs: build
     runs-on: ubuntu-latest
     environment:
@@ -73,3 +79,25 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: cv-pdf
+
+      - name: Make the release, with this version's CV
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          # the notes are the tag's own message (git tag -a); a tag without one gets its name only
+          sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$TAG" --jq .object.sha)
+          gh api "repos/$GITHUB_REPOSITORY/git/tags/$sha" --jq .message > notes.md 2>/dev/null || echo "$TAG" > notes.md
+          mv Gautham-Sam-CV.pdf "Gautham-Sam-CV-$TAG.pdf"
+          gh release create "$TAG" "Gautham-Sam-CV-$TAG.pdf" -R "$GITHUB_REPOSITORY" --title "$TAG" --notes-file notes.md --verify-tag

@@ -24,6 +24,8 @@ Every word on the pages lives in `src/data/`; `src/render/` turns it into HTML a
 
 `.github/workflows/publish.yml` builds and publishes the site to GitHub Pages on every push to `main`, once a week (to bring the commit chart up to date) and by hand. It refreshes the chart, makes the CV PDF, runs the tests (a failure stops the publish) and builds.
 
+Versions are tags: a patch for wording, a minor version for new content, a major one for a redesign. Pushing a tag such as `v1.1.0` (made with `git tag -a`, its message being the notes) builds the same way and makes a GitHub Release with that version's CV PDF attached.
+
 ## Credits
 
 The photographs in `public/photos/` are Neural Foundry's own, from its public product pages, and are credited and linked on the page where they appear.
