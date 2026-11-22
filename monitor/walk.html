@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gautham Sam · Robotics Lead</title>
+  <meta name="description" content="Gautham Sam works on the software that makes robots useful: mobile robots, arms, and the devices and platforms around them." />
+  <meta name="theme-color" content="#070a0f" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23070a0f'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%23ffb454' stroke-width='3'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/src/styles.css" />
+  <script>
+    // The walk-through lives inside the desk's second monitor. Anyone who opens this address on its
+    // own is taken to the desk with the monitor open, at the same robot if the link named one.
+    // (Without scripts there is no desk to go to, so the page stays and reads in full.)
+    (function () {
+      if (window.parent !== window || window.__stayOnWalk) return;
+      var q = new URLSearchParams(location.search), to = new URLSearchParams({ open: 'monitor' });
+      var work = (location.hash || '').slice(1) || (q.get('story') || '').split('.')[0];
+      if (/^[a-z]+$/.test(work)) to.set('work', work);
+      location.replace(new URL('../?' + to.toString(), location.href).href); // up from monitor/ to the desk
+    })();
+  </script>
+</head>
+<body>
+  <canvas id="floor" aria-hidden="true"></canvas>
+  <div id="shade" aria-hidden="true"></div>
+
+  <header id="bar">
+    <a class="brand" href="#opening">Gautham Sam</a>
+    <a class="cv-link" href="../cv.html" aria-label="CV"><span class="long">CV</span><span class="short">CV</span> <i aria-hidden="true">→</i></a>
+  </header>
+
+  <nav id="rail" aria-label="Scenes"><!--@rail--></nav>
+
+  <main id="walk"><!--@walk--></main>
+
+
+  <aside id="drawer" aria-label="Story" hidden>
+    <button class="close" aria-label="Close">×</button>
+    <div class="drawer-body"></div>
+  </aside>
+
+  <div id="stories" hidden><!--@stories--></div>
+  <!--@problems-->
+  <!--@preview-->
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+/* The desk page. Shares its colours, buttons and chips with styles.css. No side panels:
+   each object shows what it holds as itself (a screen, a board, a notebook, a sheet of paper). */
+body.desk-page { overflow: hidden; height: 100vh; }
+#room { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; touch-action: none; /* a pinch moves the camera, not the page */ opacity: 0; transition: opacity 0.7s; }
+body.room-ready #room { opacity: 1; } /* drawn: it fades in over the still picture */
+body:not(.room-ready) #room { pointer-events: none; } /* until then, clicks go to the still picture under it */
+body.no-room #room { display: none; }
+body.no-room { background: radial-gradient(1200px 700px at 60% 30%, #16202c 0%, var(--bg) 60%) fixed; }
+/* the room as a still picture, where 3D cannot run: it covers the window whatever its shape, as the room does */
+#still { position: fixed; z-index: 0; inset: 0; overflow: hidden; opacity: 0; transition: opacity 0.5s; }
+#still[hidden] { display: none; }
+#still.on { opacity: 1; }
+#still .still-pic { position: absolute; left: 50%; top: 50%; width: max(100vw, 100vh * var(--ratio, 1.7778)); aspect-ratio: var(--ratio, 1.7778); transform: translate(-50%, -50%); }
+#still img { display: block; width: 100%; height: 100%; }
+/* with the still picture, a place from the window shows as a print over the dimmed room, above its caption */
+#place-print { position: fixed; z-index: 18; left: 50%; top: calc(50% - 70px); margin: 0; padding: 10px; background: #f4f1ea; border-radius: 3px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55); transform: translate(-50%, -50%) rotate(-0.8deg); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+#place-print[hidden] { display: none; }
+#place-print.on { opacity: 1; }
+#place-print img { display: block; width: auto; height: auto; max-width: min(900px, calc(100vw - 52px)); max-height: calc(100vh - 330px); }
+body.place-print #still { filter: brightness(0.5); }
+#still { transition: opacity 0.5s, filter 0.3s; }
+/* upright (a phone): the picture fills the height and is swiped sideways, starting at the desk */
+@media (max-aspect-ratio: 1/1) {
+  #still { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; overscroll-behavior-x: contain; }
+  #still::-webkit-scrollbar { display: none; }
+  #still .still-pic { position: relative; left: auto; top: auto; transform: none; height: 100%; width: auto; }
+}
+
+#desk-hero { position: fixed; z-index: 10; left: clamp(16px, 4vw, 40px); top: calc(var(--bar) + 2px); pointer-events: none; transition: opacity 0.3s; }
+#desk-hero .who { margin: 0; font-size: 14px; }
+#desk-hero .hint { margin: 6px 0 0; font-size: 14px; }
+body.viewing #desk-hero { opacity: 0; }
+/* leaving for the CV through a drawer: the buttons step back, then the page's own colour closes over the room */
+body.going #dock, body.going #caption, body.going #bar, body.going #time-test, body.going #clock-note, body.going #preview-note { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+body.desk-page::after { content: ''; position: fixed; inset: 0; z-index: 200; background: #fbfaf7; opacity: 0; pointer-events: none; transition: opacity 0.4s ease-in; }
+@media (prefers-color-scheme: dark) { body.desk-page::after { background: #0b0f14; } }
+body.leaving::after { opacity: 1; }
+/* on light walls the words need something dark behind them */
+body[data-walls='light'] #desk-hero { background: rgba(12, 17, 24, 0.78); border-radius: 10px; padding: 8px 14px 10px; margin-left: -14px; }
+
+/* the labelled buttons along the bottom: the same objects, for anyone who would rather not hunt */
+#dock { position: fixed; z-index: 20; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 6px; padding: 6px; max-width: calc(100vw - 24px); overflow-x: auto; background: rgba(12, 17, 24, 0.82); border: 1px solid var(--line); border-radius: 14px; backdrop-filter: blur(10px); transition: opacity 0.3s; }
+#dock button { flex: none; border: 1px solid transparent; background: transparent; border-radius: 9px; padding: 6px 12px; text-align: left; cursor: pointer; color: var(--text); }
+#dock button:hover, #dock button.on { border-color: var(--amber); background: rgba(255, 180, 84, 0.08); }
+#dock b { display: block; font-size: 14px; font-weight: 620; white-space: nowrap; }
+#dock span { display: block; font-size: 12px; color: var(--muted); white-space: nowrap; }
+body.screen-on #dock, body.surface-on #dock { opacity: 0; pointer-events: none; }
+
+#caption { position: fixed; z-index: 19; left: 50%; bottom: 84px; transform: translateX(-50%); width: min(640px, calc(100vw - 32px)); text-align: center; pointer-events: none; }
+#caption p { margin: 0; display: inline-block; padding: 8px 14px; border-radius: 12px; background: rgba(12, 17, 24, 0.86); border: 1px solid var(--line); font-size: 15px; }
+#caption p[hidden], #caption .chip[hidden] { display: none; }
+#caption .place-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 8px; pointer-events: auto; }
+#caption .place-actions .btn { font-size: 13px; padding: 5px 12px; }
+#caption b { color: var(--amber); font-family: var(--mono); margin-right: 6px; }
+#caption i { display: block; color: var(--muted); font-style: normal; margin-top: 2px; }
+
+#tip { position: fixed; z-index: 30; pointer-events: none; transform: translate(14px, 14px); background: var(--panel-solid); border: 1px solid var(--amber); color: var(--text); font-size: 13.5px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; }
+.desk-page #preview-note { left: auto; right: 14px; bottom: auto; top: 64px; }
+/* the preview tools: out of sight until D is pressed or the address has ?debug */
+#time-test { position: fixed; z-index: 40; left: 16px; bottom: 16px; display: none; gap: 8px; align-items: center; font: 12px var(--mono); color: var(--amber); background: rgba(12, 17, 24, 0.92); border: 1px solid rgba(255, 180, 84, 0.4); border-radius: 8px; padding: 5px 10px; }
+body.debug #time-test { display: flex; }
+#time-test input { width: 150px; accent-color: var(--amber); }
+/* while the clock has been set by hand */
+#clock-note { position: fixed; z-index: 40; left: 50%; transform: translateX(-50%); top: 12px; margin: 0; display: flex; gap: 8px; align-items: center; white-space: nowrap; font-size: 13px; color: var(--text); background: rgba(12, 17, 24, 0.92); border: 1px solid var(--line); border-radius: 999px; padding: 5px 6px 5px 14px; }
+#clock-note[hidden] { display: none; }
+#clock-note b { font-family: var(--mono); color: var(--amber); }
+#clock-note span { color: var(--muted); }
+#clock-note .btn { font-size: 12px; padding: 4px 11px; }
+@media (max-width: 620px) { #clock-note { top: calc(var(--bar) + 64px); } #clock-note span { display: none; } }
+#time-test output { min-width: 40px; }
+#time-test button { font: inherit; color: inherit; background: none; border: 1px solid rgba(255, 180, 84, 0.4); border-radius: 6px; cursor: pointer; }
+
+/* the note, as text, only where the room cannot be drawn */
+#note-plain { display: none; }
+body.no-room #note-plain { display: block; position: fixed; z-index: 15; right: 18px; top: calc(var(--bar) + 12px); width: 250px; padding: 14px 16px; background: #ffd98a; color: #4a3006; border-radius: 4px; transform: rotate(1.5deg); font-size: 13.5px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
+/* with the still picture up, the note is the small one on the monitor in the picture: the text stays
+   for screen readers only. The big card shows only if the picture does not arrive. */
+body.has-still #note-plain { position: absolute !important; transform: none !important; width: 1px !important; height: 1px !important; margin: 0 !important; padding: 0 !important; overflow: hidden; clip-path: inset(50%); white-space: nowrap; box-shadow: none; }
+#note-plain .verse { margin: 0 0 10px; padding: 0; border: 0; font-size: 13.5px; font-weight: 600; line-height: 1.45; }
+.verse span { display: block; }
+#note-plain cite { color: #7a5310; font-size: 12.5px; margin-top: 6px; }
+#note-plain .verse-link { color: #7a5310; font-weight: 700; }
+
+/* ---------- a surface: the object itself, close up */
+#surface { position: fixed; inset: 0; z-index: 35; display: grid; place-items: center; padding: clamp(10px, 3vh, 34px) clamp(10px, 3vw, 40px); background: rgba(4, 6, 9, 0.5); opacity: 0; transition: opacity 0.35s; }
+#surface.open { opacity: 1; }
+#surface[hidden], #screen[hidden] { display: none; } /* otherwise it sits invisibly over the room and takes every click */
+#surface .close { position: fixed; top: 16px; right: 18px; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); background: rgba(12, 17, 24, 0.9); font-size: 22px; line-height: 1; cursor: pointer; }
+#surface .close:hover { border-color: var(--amber); }
+.surface-body { max-width: 100%; max-height: 100%; overflow: auto; }
+
+/* the whiteboard */
+.board { position: relative; width: min(1040px, 94vw); background: #e9edf1; color: #1d2b3a; border: 12px solid #5a6676; border-radius: 10px; padding: 22px 28px 46px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); }
+.board-title { margin: 0 0 6px; font: 600 15px var(--mono); color: #6b7786; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.board-grid { display: grid; grid-template-columns: 1.55fr 1fr; grid-template-rows: auto 1fr; grid-template-areas: 'tree lists' 'stories lists'; gap: 4px 26px; align-items: start; }
+.board-grid > .tree { grid-area: tree; }
+.board-lists { grid-area: lists; }
+/* what a bug, a feature or "me" has to say opens in the empty space under the tree */
+.board-stories { grid-area: stories; min-width: 0; }
+.board-stories .board-story { margin-top: 6px; }
+.tree { width: 100%; height: auto; }
+.tree .lines path { fill: none; stroke: #1d4f8c; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.tree .lines .dash { stroke: #2f8f5a; stroke-dasharray: 6 6; }
+.tree .node rect { fill: #f6f8fa; stroke: #1d4f8c; stroke-width: 2.5; }
+.tree .node text { font: 600 15px var(--sans); fill: #1d2b3a; }
+.tree .node.small text { font-size: 13px; }
+.tree .node.me rect { stroke: #c9661a; }
+.tree .node.me text { fill: #c9661a; font-weight: 700; }
+.tree .beside { font: 600 13px var(--sans); fill: #2f8f5a; }
+.tree .tag rect { fill: #2f8f5a; stroke: none; transition: transform 0.15s; transform-box: fill-box; transform-origin: center; }
+.tree .tag[data-on^='B'] rect { fill: #c0392b; }
+.tree .tag text { font: 700 12px var(--sans); fill: #fff; }
+.tree .tag.hot rect, .tree .tag.lit rect { transform: scale(1.35); stroke: #1d2b3a; stroke-width: 2; }
+.board-lists h3 { margin: 4px 0 6px; font-size: 18px; text-decoration: underline; text-underline-offset: 4px; letter-spacing: 0; }
+.board-lists h3.bugs { color: #c0392b; }
+.board-lists h3.features { color: #2f8f5a; margin-top: 16px; }
+.board-lists ul { list-style: none; margin: 0; padding: 0; }
+.board-lists .item { display: block; width: 100%; text-align: left; font: 500 15px var(--sans); color: #1d2b3a; background: none; border: 0; padding: 5px 6px; border-radius: 6px; }
+.board-lists button.item { cursor: pointer; text-decoration: underline dotted #c0392b; text-underline-offset: 4px; }
+.board-lists button.item:hover, .board-lists button.item[aria-expanded='true'] { background: rgba(192, 57, 43, 0.1); }
+.board-lists .item b { font-weight: 700; margin-right: 6px; color: #2f8f5a; }
+.board-lists .bugs + ul .item b { color: #c0392b; }
+.board-story { margin-top: 14px; padding: 12px 14px; border: 2px dashed #c0392b; border-radius: 8px; font-size: 15px; line-height: 1.5; background: #f6f8fa; }
+.board-story b { color: #c0392b; margin-right: 6px; }
+/* features: green where bugs are red; said once under the heading who built them */
+.board-note { margin: -2px 0 6px 6px; font: 500 13px var(--mono); color: #6b7786; }
+.board-lists .board-note + ul button.item { text-decoration-color: #2f8f5a; }
+.board-lists .board-note + ul button.item:hover, .board-lists .board-note + ul button.item[aria-expanded='true'] { background: rgba(47, 143, 90, 0.12); }
+.board-story.feature { border-color: #2f8f5a; }
+.board-story.feature b { color: #2f8f5a; }
+.board-story.feature { line-height: 1.45; }
+.board-story.feature p { margin: 4px 0 6px; }
+.board-story.feature dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; font-size: 14.5px; }
+.board-story.feature dt { font: 600 12.5px var(--mono); color: #2f8f5a; padding-top: 3px; white-space: nowrap; }
+.board-story.feature dd { margin: 0; }
+/* "me" at the top of the tree opens how the team came to be */
+.tree .node.me[data-item] { cursor: pointer; outline: none; }
+.tree .node.me[data-item] rect { stroke-dasharray: 5 3; }
+.tree .node.me[data-item]:hover rect, .tree .node.me[data-item]:focus-visible rect, .tree .node.me[aria-expanded='true'] rect { fill: #fde9d6; }
+.tree .node.me[data-item]:focus-visible rect { stroke-width: 3.5; }
+.board-story.me { border-color: #d9792b; line-height: 1.55; }
+.board-story.me b { color: #d9792b; }
+.board-story.me p { margin: 4px 0 6px; }
+/* everyone on the tree opens what they are on: blue like the tree they sit in */
+.tree .node:not(.me)[data-item] { cursor: pointer; outline: none; }
+.tree .node:not(.me)[data-item]:hover > rect, .tree .node:not(.me)[data-item]:focus-visible > rect, .tree .node:not(.me)[aria-expanded='true'] > rect { fill: #dbe7f5; }
+.tree .node:not(.me)[data-item]:focus-visible > rect { stroke-width: 3.5; }
+.board-story.eng { border-color: #1d4f8c; }
+.board-story.eng > b { color: #1d4f8c; }
+.board-story.eng dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 6px 0 0; }
+.board-story.eng dt { font: 600 12.5px var(--mono); color: #1d4f8c; padding-top: 3px; white-space: nowrap; }
+.board-story.eng dd { margin: 0; }
+.board-story .goto { font: 500 15px var(--sans); color: #1d2b3a; background: none; border: 0; padding: 0; text-align: left; }
+.board-story .goto b { color: #2f8f5a; }
+.board-story .goto[data-goto^='B'] b { color: #c0392b; }
+.board-story button.goto { cursor: pointer; text-decoration: underline dotted #2f8f5a; text-underline-offset: 4px; }
+.board-story button.goto[data-goto^='B'] { text-decoration-color: #c0392b; }
+.board-hint { position: absolute; right: 34px; bottom: 14px; margin: 0; text-align: right; font: 500 13px var(--mono); color: #6b7786; }
+.board-hint .coarse { display: none; }
+@media (pointer: coarse) { .board-hint .fine { display: none; } .board-hint .coarse { display: inline; } }
+
+/* On the whiteboard in the room: no backdrop, no drawn frame (the frame is the 3D board). The
+   page is fitted to the board's corners by desk-main.js, like the monitor's. */
+#surface.fitted { display: block; padding: 0; background: none; transition: none; pointer-events: none; }
+#surface.fitted .close, #surface.fitted .board { pointer-events: auto; }
+#surface.fitted .surface-body { max-width: none; max-height: none; overflow: visible; }
+.board.fitted, #surface.fitted .board { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; box-sizing: border-box; border: 0; border-radius: 0; box-shadow: none; overflow: hidden; padding: 26px 34px 44px; }
+
+/* the notebook */
+.book { width: min(720px, 94vw); background: #f3ecda; color: #2a2418; border-radius: 6px 12px 12px 6px; border-left: 16px solid #1f2731; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); background-image: repeating-linear-gradient(#f3ecda 0 31px, #d9cfb6 31px 32px); }
+.book-tabs { display: flex; gap: 6px; padding: 14px 22px 0; flex-wrap: wrap; }
+.book-tabs button { border: 0; background: #e2d8be; color: #5a4d33; font: 600 14px var(--sans); padding: 6px 14px; border-radius: 8px 8px 0 0; cursor: pointer; }
+.book-tabs button[aria-selected='true'] { background: #c9661a; color: #fff; }
+.book-pages { padding: 10px 30px 30px; min-height: 300px; }
+.page[hidden] { display: none; }
+.page h3 { font-size: 1.45rem; margin: 14px 0 12px; color: #2a2418; }
+.page p, .page li { font-size: 16.5px; line-height: 32px; margin: 0; }
+.page ul { margin: 0; padding-left: 22px; }
+.page .actions { margin-top: 22px; }
+.page .btn { background: #2a2418; color: #f3ecda; border-color: #2a2418; }
+.page .btn.ghost { background: transparent; color: #7a6b4e; border-color: #7a6b4e; }
+.pencil { color: #8a7a5a !important; font-style: italic; margin-top: 32px !important; }
+
+/* a sheet of paper from the bin, flattened out */
+.paper { width: min(520px, 92vw); background: #f4f5f6; color: #1d232b; padding: 30px 34px; transform: rotate(-1.2deg); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); background-image: linear-gradient(115deg, transparent 49.6%, rgba(0, 0, 0, 0.07) 50%, transparent 50.6%), linear-gradient(28deg, transparent 49.6%, rgba(0, 0, 0, 0.05) 50%, transparent 50.6%), linear-gradient(160deg, transparent 49.7%, rgba(0, 0, 0, 0.05) 50%, transparent 50.5%); }
+.paper-lead { margin: 0 0 14px; font: 600 13px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: #7b8590; }
+.paper h3 { font-size: 1.35rem; margin: 0 0 10px; color: #1d232b; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.paper p { margin: 0 0 10px; }
+.paper .pencil { margin-top: 20px !important; color: #8a929b !important; }
+
+/* ---------- the second monitor: a computer inside the room */
+/* The page is drawn on the glass of the monitor in the room. There is no frame and no backdrop
+   here: desk-main.js fits .display to the four corners of that glass on every frame. */
+#screen { position: fixed; left: 0; top: 0; z-index: 35; }
+.display { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; opacity: 0; background: #080c12; display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; overflow: hidden; }
+/* on a phone, or with no 3D room, the page simply fills the screen */
+body.flat-screen #screen { inset: 0; opacity: 0; transition: opacity 0.35s; }
+body.flat-screen #screen.open { opacity: 1; }
+body.flat-screen .display { position: fixed; inset: 0; opacity: 1; }
+/* a little darkening at the edges, as glass has */
+.display::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.45); }
+body.flat-screen .display::after { display: none; }
+/* a browser: a row of tabs, an address bar, and the page */
+.screen-top { display: flex; align-items: flex-end; gap: 6px; padding: 8px 12px 0; background: #0d131b; }
+.dots { display: flex; gap: 6px; align-self: center; margin-right: 10px; }
+.dots i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
+.dots i:nth-child(2) { background: #febc2e; } .dots i:nth-child(3) { background: #28c840; }
+.btab { border: 0; background: transparent; color: var(--muted); font: 600 14px var(--sans); padding: 8px 18px 9px; border-radius: 9px 9px 0 0; cursor: pointer; }
+.btab:hover { color: var(--text); }
+.btab[aria-selected='true'] { background: #080c12; color: var(--text); box-shadow: inset 0 2px 0 var(--amber); }
+.screen-top .btn { margin: 0 0 6px auto; padding: 5px 14px; font-size: 14px; }
+.address { display: flex; align-items: center; gap: 14px; padding: 7px 14px; background: #080c12; border-bottom: 1px solid var(--line); }
+.screen-path { margin: 0; font: 13px var(--mono); color: var(--text); background: #0d131b; border: 1px solid var(--line); border-radius: 999px; padding: 4px 14px; min-width: 240px; }
+.screen-path b { color: var(--muted); font-weight: 400; }
+.screen-lead { margin: 0; color: var(--muted); font-size: 14px; }
+.pane { min-height: 0; overflow: hidden; }
+.pane[hidden] { display: none; }
+#tab-walk iframe { width: 100%; height: 100%; border: 0; display: block; background: #070a0f; }
+#tab-detail { display: grid; grid-template-columns: 210px 1fr; }
+#tab-detail[hidden], #tab-walk[hidden], #tab-map[hidden] { display: none; } /* the tab that is not showing */
+/* the Live map: the robot's own picture from the room, as large as the tab allows, nothing else */
+#tab-map { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #0a1017; }
+#tab-map canvas { display: block; border-radius: 4px; }
+#tab-map .map-legend { margin: 0; max-width: 70ch; text-align: center; font: 500 12.5px var(--mono); color: #6f8296; }
+.screen-nav { display: flex; flex-direction: column; gap: 2px; padding: 14px 10px; border-right: 1px solid var(--line); overflow-y: auto; background: #0a0f16; }
+.screen-nav a { padding: 8px 12px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 14.5px; border-left: 2px solid transparent; }
+.screen-nav a:hover { color: var(--text); }
+.screen-nav a.on { color: var(--text); background: rgba(255, 180, 84, 0.08); border-left-color: var(--amber); }
+.screen-scroll { overflow-y: auto; padding: 4px clamp(18px, 4vw, 56px) 100px; scroll-behavior: smooth; }
+.work { max-width: 760px; padding: 36px 0 28px; border-bottom: 1px solid var(--line); }
+.work h2 { font-size: clamp(1.35rem, 2.2vw, 1.8rem); margin-bottom: 14px; }
+.work-story { margin-top: 24px; padding: 16px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); }
+.work-story h3 { font-size: 1.15rem; margin-bottom: 10px; }
+.work-story p { margin: 0 0 10px; }
+.work-story .clips { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+@media (max-width: 860px) {
+  #dock { left: 12px; right: 12px; transform: none; justify-content: flex-start; }
+  #caption { bottom: 78px; }
+  body.debug #time-test { display: none; }
+  .board-grid { grid-template-columns: 1fr; grid-template-areas: 'tree' 'lists' 'stories'; } /* opened stories below the lists, where they were tapped */
+  .board-story.feature dl { grid-template-columns: 1fr; gap: 0; } /* on narrow screens each label sits above its words */
+  .board-story.feature dd { margin-bottom: 6px; }
+  #tab-detail { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .screen-path { min-width: 0; }
+  .screen-nav { flex-direction: row; border-right: 0; border-bottom: 1px solid var(--line); padding: 6px 8px; overflow-x: auto; }
+  .screen-nav a { white-space: nowrap; border-left: 0; }
+  .screen-lead { display: none; }
+  .book-pages { padding: 8px 18px 24px; }
+  body.no-room #note-plain { position: relative; right: auto; top: auto; margin: 142px 16px 0; width: auto; transform: none; } /* below the two lines at the top */
+}
+@media (prefers-reduced-motion: reduce) { #surface, body.flat-screen #screen, #still, #room { transition: none; } .screen-scroll { scroll-behavior: auto; } }
+
+/* the loading screen on the monitor, while the walk-through starts */
+#tab-walk { position: relative; }
+.loader { position: absolute; inset: 0; display: grid; place-content: center; gap: 14px; justify-items: center; background: #070a0f; transition: opacity 0.5s; }
+.loader.gone { opacity: 0; pointer-events: none; }
+.loader-text { font: 14px var(--mono); color: var(--muted); }
+.loader-text::after { content: ' …'; }
+.loader-bar { width: 220px; height: 4px; border-radius: 2px; background: #151d27; overflow: hidden; }
+.loader-bar i { display: block; width: 40%; height: 100%; background: var(--amber); border-radius: 2px; animation: loader 1.1s ease-in-out infinite alternate; }
+@keyframes loader { from { transform: translateX(-20%); } to { transform: translateX(170%); } }
+@media (prefers-reduced-motion: reduce) { .loader-bar i { animation: none; width: 100%; } }
+#fps { min-width: 52px; text-align: right; color: var(--text); }
+
+/* In 2020 there was no team and nothing on the board yet: the board in the room is blank,
+   so the board you walk up to is blank too. */
+body[data-time='then'] .board > * { visibility: hidden; }
+/* in 2020 the board is blank but for three notes to himself, in plain dark marker, bottom left */
+.board-then { display: none; }
+body[data-time='then'] .board > .board-then { visibility: visible; display: block; position: absolute; left: 44px; bottom: 40px; z-index: 1; list-style: none; margin: 0; padding: 0; font: 600 22px var(--sans); color: #26303b; }
+.board-then li { margin-top: 6px; transform: rotate(-1.2deg); }
+.board-then li:nth-child(2) { transform: rotate(0.6deg) translateX(3px); }
+.board-then li:nth-child(3) { transform: rotate(-0.4deg) translateX(1px); }
+.board-then .done { color: #7a8593; }
+.board-then s { text-decoration-thickness: 2px; }
+body[data-time='then'] .board::after { content: '?'; position: absolute; inset: 0; display: grid; place-items: center; font: 600 120px var(--sans); color: #9aa6b3; }
+
+/* The notebook, drawn on the open notebook on the desk: two pages, sections on the left,
+   the page being read on the right. */
+#surface.fitted .book { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; box-sizing: border-box; pointer-events: auto; border: 0; border-radius: 0; box-shadow: none; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; background-image: linear-gradient(90deg, transparent calc(50% - 2px), #cdbf9f calc(50% - 2px), #cdbf9f calc(50% + 2px), transparent calc(50% + 2px)), repeating-linear-gradient(#f3ecda 0 31px, #d9cfb6 31px 32px); }
+#surface.fitted .book-tabs { flex-direction: column; align-items: flex-start; gap: 10px; padding: 46px 34px; }
+#surface.fitted .book-tabs button { border-radius: 8px; font-size: 20px; padding: 8px 18px; }
+#surface.fitted .book-pages { padding: 24px 30px 24px 34px; overflow-y: auto; min-height: 0; }
+.book-tabs button.unread::after { content: ''; display: inline-block; width: 8px; height: 8px; margin-left: 8px; border-radius: 50%; background: #c9661a; vertical-align: middle; } /* not read yet */
+.book-tabs button[aria-selected='true'].unread::after { display: none; }
+.to-notebook { max-width: 760px; margin: 40px 0 0; padding: 22px 0; font-size: 1.1rem; color: var(--text); display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }

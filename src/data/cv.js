@@ -1,0 +1,215 @@
+// Every word on the CV page (cv.html), and so in the PDF made from it.
+// Source: Gautham's own resume, as corrected on 16 Nov 2026. No phone number or email here: they
+// are kept in profile.js, and the tests check where they show.
+// Text in `backticks` is shown as code. Numbers must agree with profile.js (the tests check).
+export const cv = {
+  "intro": "I work on the software that makes robots useful: mobile robots, arms, the arm of a humanoid, and the devices and platforms around them. I trained as a mechanical engineer and have spent six years in robotics, first on care robots at Invento Robotics, now at Neural Foundry, where I was the first robotics engineer and work with a team of six.",
+  "glance": [
+    [
+      "Years in robotics",
+      "6 (since 2020)"
+    ],
+    [
+      "Robot types",
+      "Mobile robots, collaborative arms, humanoid arm, lab devices"
+    ],
+    [
+      "Current team",
+      "6 engineers"
+    ],
+    [
+      "Pull requests",
+      "212 written, 345 reviewed for teammates"
+    ],
+    [
+      "Main stack",
+      "ROS 2, Python, C++, embedded C"
+    ]
+  ],
+  // What the work is made of, in four lines.
+  "profileTitle": "What I work on",
+  "profile": [
+    [
+      "Robotics architecture",
+      "Choosing robot platforms, system architecture, joining hardware and software, reusable platforms, several robots at once"
+    ],
+    [
+      "Technical direction",
+      "Engineering standards, architecture and code reviews, technical specifications, mentoring, hiring, release practice"
+    ],
+    [
+      "Automation",
+      "Lab automation, device orchestration, automation languages, workflow execution, recovery and fault handling"
+    ],
+    [
+      "Systems",
+      "Embedded systems, ROS 2, distributed systems, simulation, teleoperation, cloud infrastructure, deployment"
+    ]
+  ],
+  "skills": [
+    [
+      "Languages",
+      "Python, C++, embedded C, Bash, JavaScript, Swift"
+    ],
+    [
+      "Robotics",
+      "ROS 2 (Humble, Jazzy), Nav2, MoveIt 2, rosbridge, URDF"
+    ],
+    [
+      "Simulation",
+      "Isaac Sim, Gazebo"
+    ],
+    [
+      "Robots and hardware",
+      "Doosan collaborative arms, mobile robot bases, ZED and RealSense cameras, ESP32, Arduino"
+    ],
+    [
+      "Device protocols",
+      "RS485, RS232, Modbus, UART, I2C, TCP/IP, RTSP"
+    ],
+    [
+      "Messaging and streaming",
+      "MQTT, WebSocket, WebRTC, WHIP"
+    ],
+    [
+      "Backend and cloud",
+      "FastAPI, Celery, Redis, Elasticsearch, Docker, AWS, Google Cloud"
+    ],
+    [
+      "AI and vision",
+      "OpenCV, tools built on language models, vector search (Milvus)"
+    ],
+    [
+      "Team practice",
+      "Sprint planning, code review, architecture documents, hiring"
+    ]
+  ],
+  "jobs": [
+    {
+      "company": "Neural Foundry",
+      "place": "Hyderabad",
+      "roles": [
+        {
+          "title": "Robotics Lead",
+          "extra": "(joined as Senior Robotics Engineer)",
+          "dates": "June 2024 – present",
+          "bullets": [
+            "First robotics engineer at the company. The team is now six; I have been part of hiring each person, and built our take-home test, with its own simulator and scoring.",
+            "First engineer on ALEX (Automated Lab Executor), a ROS 2 system that runs lab tasks with a collaborative robot arm. 482 commits to it in its first nine months; first stable release closed in early 2026.",
+            "ALEX now has two generations of its automation language, workflow execution, device actions, telemetry, cancel, pause and resume, and it can pick a long lab protocol back up after a failure.",
+            "With the team, brought around ten lab devices under robot control in a client’s lab: syringe pumps, gravimetric liquid and solid dispensers, balances, a pipette station, a homogenizer, a sonicator. Each follows the same path from bare hardware to a scriptable action: firmware, control node, software abstraction, device management, workflow.",
+            "Designed the ROS 2 client and the embedded client that connect robots and devices to URP, the company’s robotics platform: a config-driven command server for arms, mobile robots and cameras; a telemetry and command registry; device logs as telemetry; authenticated MQTT over TLS. A new robot is brought on by configuration, not by a build of its own.",
+            "Found the same control server written three times, for arms, mobile robots and audio-video, and merged them into one shared base without changing what they do.",
+            "Designed a hardware abstraction for the embedded code, so the same application logic runs on a workstation simulator, an Arduino and an ESP32, and firmware can be tested without the hardware.",
+            "Made it possible to run several robots at once: each robot’s stack is isolated and has a virtual mode, so many can work against one platform and one simulation.",
+            "Built safe-path planning for the arm (a multi-layer graph of safety points, searched with Dijkstra’s algorithm) and fault recovery (runtime errors, reconnection, resuming a task partway).",
+            "Designed the peer-to-peer link for RAVEN, the company’s VR teleoperation of a robot arm. Tested Europe to India over a home connection at about 100 ms.",
+            "Moved robot camera streaming from a custom WebRTC client to WHIP with a media server, so one published stream serves every viewer; added stereo camera support.",
+            "Ran the move of the whole system to ROS 2 Jazzy: build environment, robot application, Doosan driver, development environment and automation language, across more than 200 files.",
+            "Look after the project building the system’s simulated twin in Isaac Sim, and have reviewed 65 of its pull requests.",
+            "Plan two-week sprints, review code, write architecture documents, run releases from development to production.",
+            "Support client work: site visits, robot selection (arms, SCARA, mobile robots from several vendors), audit responses, proposals."
+          ]
+        }
+      ]
+    },
+    {
+      "company": "Invento Robotics (Mitra Robot)",
+      "place": "Bangalore",
+      "roles": [
+        {
+          "title": "Senior Software Engineer",
+          "extra": "",
+          "dates": "January 2023 – May 2024",
+          "bullets": [
+            "Built joystick teleoperation for the robot fleet over ROS Bridge, with vibration feedback when the robot nears an obstacle.",
+            "Built a Python WebSocket server and client for robot-to-portal communication, tested to over 1,000 concurrent connections.",
+            "Worked with the chief architect on the image and video pipelines for Mitra AI (FastAPI, Celery with Redis, Milvus vector search).",
+            "Mapped and deployed robots at customer sites, including mapping one site remotely from another country.",
+            "In the care portal, did most of the work on the live map after the founder started it: robot position and lidar on a canvas, sending navigation points, a path layer, saved patrols.",
+            "Wrote the first version of a React Native interface app for the robot: speech, camera, video and option screens driven by defined flows.",
+            "Set up a relay server so robots on site networks could be reached remotely, and a logging service (FastAPI, Elasticsearch).",
+            "With the team, built a person-following and gesture-response behaviour, and a personalised daily flow of news, music and exercise for seniors.",
+            "Built recording and cleaning tools for BodyLangRec, a public gesture dataset (35 gestures, 39 participants, 22 of them over 70).",
+            "Moved server infrastructure from Google Cloud to AWS with no downtime.",
+            "Built bots for a machine learning course: question answering, quizzes, onboarding."
+          ]
+        },
+        {
+          "title": "Software Engineer",
+          "extra": "",
+          "dates": "October 2020 – December 2022",
+          "bullets": [
+            "With the team, rebuilt an inherited ROS 1 navigation stack and migrated it to ROS 2 and Nav2. Wrote path-tracking controllers (pure pursuit, Stanley). The robot later ran 1,000 km autonomously without an incident, as the company announced.",
+            "Wrote autonomous docking using ArUco markers; trained teammates and customers on it.",
+            "Added a fleet patrol feature.",
+            "Worked on the takeover page of the fleet web app: driving by gamepad and keyboard, chat, robot controls.",
+            "Prototyped the control system for a humanoid arm and hands: Arduino motor control, I2C, power measurement.",
+            "Worked on the robot’s iOS app in Swift: the socket link to the fleet, Wi-Fi setup over Bluetooth, text-to-speech voices with caching, VoIP calling.",
+            "Built tools for preparing the robot’s conversation content."
+          ]
+        },
+        {
+          "title": "Software Engineer Intern",
+          "extra": "",
+          "dates": "August – September 2020",
+          "bullets": [
+            "Robot URDF model and Gazebo simulation; test procedures for the navigation stack; first draft of the technical manual."
+          ]
+        }
+      ]
+    },
+    {
+      "company": "Earlier internships",
+      "place": "",
+      "roles": [
+        {
+          "title": "",
+          "extra": "",
+          "dates": "",
+          "bullets": [
+            "Spatez Technology, Thrissur · December 2019 – January 2020",
+            "Innovians Technologies, Noida · June – August 2019"
+          ]
+        }
+      ]
+    }
+  ],
+  "lists": [
+    {
+      "title": "Open source",
+      "items": [
+        "MoveIt 2: fix to the simulated Panda servo configuration (merged, 2025).",
+        "Doosan `doosan-robot2`: variable fix (merged, 2026)."
+      ]
+    },
+    {
+      "title": "Publications and data",
+      "items": [
+        "“Low Cost FGC Electric Wheelchair”, RSP Science Hub: a gesture-controlled wheelchair built at college.",
+        "BodyLangRec: A Gesture Dataset (Kaggle), contributor."
+      ]
+    },
+    {
+      "title": "Courses and prizes",
+      "items": [
+        "NPTEL Robotics, Elite Silver: kinematics, dynamics, motion and trajectory planning.",
+        "Paper presentations: first prize at CSI College of Engineering, second prize at Vellalar College of Engineering."
+      ]
+    },
+    {
+      "title": "Community",
+      "items": [
+        "ROSCon India 2025, Pune."
+      ]
+    },
+    {
+      "title": "Education",
+      "items": [
+        "B.E. Mechanical Engineering, CSI College of Engineering (Anna University), 2016 – 2020. CGPA 6.7 / 10."
+      ]
+    }
+  ],
+  "skillsNote": "Only what the work above shows.",
+  "activityNote": "Days with a commit, 2021 to now. The robot navigation code from 2020–22 is not included."
+};

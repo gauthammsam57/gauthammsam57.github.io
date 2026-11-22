@@ -1,0 +1,24 @@
+{
+  "name": "portfolio-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test tests/data.test.mjs tests/build.test.mjs",
+    "test:e2e": "node --test --test-concurrency=1 tests/e2e.test.mjs",
+    "test:all": "npm test && npm run test:e2e",
+    "refresh-activity": "node scripts/refresh-activity.mjs",
+    "cv-pdf": "node scripts/cv-pdf.mjs",
+    "stills": "node scripts/stills.mjs"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1",
+    "vite": "^6.4.6"
+  }
+}

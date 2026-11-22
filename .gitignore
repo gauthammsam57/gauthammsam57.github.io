@@ -1,0 +1,6 @@
+node_modules/
+dist/
+
+# Made on every publish by the workflow (npm run cv-pdf), so not kept in git
+public/Gautham-Sam-CV.pdf
+cv-pdf.stamp
