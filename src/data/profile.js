@@ -11,9 +11,10 @@ export const profile = {
     github: 'https://github.com/gauthammsam57',
     email: 'gauthammsam57@gmail.com', // chosen 16 Nov 2026
   },
-  // Where the site lives, for the link preview (it needs full addresses). GitHub Pages, from a public
-  // repository named gauthammsam57.github.io, which GitHub serves at the bare address (decided 19 Nov 2026).
-  site: 'https://gauthammsam57.github.io/',
+  // Where the site lives, for the link preview (it needs full addresses). GitHub Pages, from the public
+  // repository gauthammsam57.github.io, served at the free is-a.dev name (registered 23 Nov 2026,
+  // is-a-dev/register#62462); the github.io address redirects here. cv.gauthamsam.is-a.dev redirects to cv.html.
+  site: 'https://gauthamsam.is-a.dev/',
   // Shown on the CV page and in its PDF only, at Gautham's request (16 Nov 2026). Not on the desk or the walk-through.
   phone: '+91 80882 29827',
   numbers: {

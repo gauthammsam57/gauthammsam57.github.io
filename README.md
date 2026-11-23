@@ -1,7 +1,7 @@
 # gauthammsam57.github.io
 
 My portfolio: a desk in 3D, a walk through the robots I have worked on, and my CV.
-Live at **https://gauthammsam57.github.io/**.
+Live at **https://gauthamsam.is-a.dev/** (the CV alone: **https://cv.gauthamsam.is-a.dev/**).
 
 ## How this was made
 
